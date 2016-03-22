@@ -1,0 +1,5 @@
+Name: paththat
+Description: CPU based bidirectional path tracer written in ooc
+SourcePath: source
+
+Main: main.ooc
