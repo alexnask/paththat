@@ -1,6 +1,9 @@
 import Points, Vectors, Material
 import ../UnsafeArray
 
+import math/Random
+import math
+
 _sameSide: func (a, b, c, d: Point3d<Double>) -> Bool {
     cross1 := (d - c) vec() cross((a - c) vec())
     cross2 := (d - c) vec() cross((b - c) vec())
@@ -20,6 +23,7 @@ Surface: abstract class {
 
     moveBy: abstract func (p: Point3d<Double>)
     contains?: abstract func(p: Point3d<Double>) -> Bool
+    randomPoint: abstract func -> Point3d<Double>
 
     minMax: func (p: Point3d<Double>) {
         if (p x < xmin) {
@@ -89,6 +93,13 @@ Triangle: class extends Surface {
     origin: func -> Point3d<Double> {
         p1
     }
+
+    randomPoint: func -> Point3d<Double> {
+        r1 := Random random() as Float / RAND_MAX
+        r2 := Random random() as Float / RAND_MAX
+
+        p1 * (1 - r1 sqrt()) + p2 * (r1 sqrt() * (1 - r2)) + p3 * (r1 sqrt() * r2)
+    }
 }
 
 ConvexPolygon: class extends Surface {
@@ -138,5 +149,49 @@ ConvexPolygon: class extends Surface {
 
     origin: func -> Point3d<Double> {
         points[0]
+    }
+
+    randomPoint: func -> Point3d<Double> {
+        // Ok, so we chose two random edges, take two random points on them
+        // and then a random point on the line these two points define
+        vertex1_idx := Random randRange(0, points length)
+        vertex2_idx := Random randRange(0, 2) == 0 ? (vertex1_idx + 1) % points length : vertex1_idx - 1
+        if (vertex2_idx < 0) {
+            vertex2_idx += points length
+        }
+
+        // We could allow for 1 point overlap but my brain hurts right now
+        vertex3_idx := Random randRange(0, points length - 2)
+
+        if (vertex3_idx >= vertex1_idx) {
+            vertex3_idx += 1
+        }
+
+        if (vertex3_idx >= vertex2_idx) {
+            vertex3_idx += 1
+        }
+
+        vertex4_idx := Random randRange(0, 2) == 0 ? (vertex3_idx + 1) % points length : vertex3_idx - 1
+        if (vertex4_idx < 0) {
+            vertex2_idx += points length
+        }
+
+        edge1_pt_percent := Random random() as Float / RAND_MAX
+
+        v1 := points[vertex1_idx]
+        v2 := points[vertex2_idx]
+
+        pt1 := v1 + (v2 - v1) * edge1_pt_percent
+
+        edge2_pt_percent := Random random() as Float / RAND_MAX
+
+        v3 := points[vertex3_idx]
+        v4 := points[vertex4_idx]
+
+        pt2 := v3 + (v4 - v3) * edge2_pt_percent
+
+        pt_percent := Random random() as Float / RAND_MAX
+
+        pt1 + (pt2 - pt1) * pt_percent
     }
 }

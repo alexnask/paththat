@@ -52,11 +52,15 @@ Scene: class {
     // This is pretty much only needed to animate (have a concept of objects in the scene)
     meshes: UnsafeArray<Mesh>
 
+    // The light surfaces belong to 'surfaces' too
+    lights: UnsafeArray<Mesh>
+
     camera: Camera
 
-    init: func (surfacePtr: Surface*, surfaceLen: Int, meshPtr: Mesh*, meshLen: Int, =camera) {
+    init: func (surfacePtr: Surface*, surfaceLen: Int, meshPtr: Mesh*, meshLen: Int, lightPtr: Mesh*, lightLen: Int, =camera) {
         surfaces = (surfacePtr, surfaceLen) as UnsafeArray<Surface>
         meshes = (meshPtr, meshLen) as UnsafeArray<Mesh>
+        lights = (lightPtr, lightLen) as UnsafeArray<Mesh>
 
         intersectingSurfaces = UnsafeArray<PotentialIntersection> new(surfaceLen)
         intersectingSurfaces length = 0

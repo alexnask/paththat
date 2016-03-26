@@ -1,4 +1,5 @@
 import Surfaces, Mesh, Points, Material
+import ../render/Bitmap
 
 import text/StringTokenizer
 import structs/[HashMap, ArrayList]
@@ -223,9 +224,7 @@ ObjLoader: class {
                         return
                     }
 
-                    currMtl ambient r = 255 * parts[1] toDouble()
-                    currMtl ambient g = 255 * parts[2] toDouble()
-                    currMtl ambient b = 255 * parts[3] toDouble()
+                    currMtl ambient = point(parts[1] toDouble(), parts[2] toDouble(), parts[3] toDouble())
                 } else if (lineBuff startsWith?("Kd " _buffer)) {
                     parts := lineBuff split(' ')
 
@@ -239,9 +238,7 @@ ObjLoader: class {
                         return
                     }
 
-                    currMtl diffuse r = 255 * parts[1] toDouble()
-                    currMtl diffuse g = 255 * parts[2] toDouble()
-                    currMtl diffuse b = 255 * parts[3] toDouble()
+                    currMtl diffuse = point(parts[1] toDouble(), parts[2] toDouble(), parts[3] toDouble())
                 } else if (lineBuff startsWith?("Ks " _buffer)) {
                     parts := lineBuff split(' ')
 
@@ -255,9 +252,7 @@ ObjLoader: class {
                         return
                     }
 
-                    currMtl specular r = 255 * parts[1] toDouble()
-                    currMtl specular g = 255 * parts[2] toDouble()
-                    currMtl specular b = 255 * parts[3] toDouble()
+                    currMtl specular = point(parts[1] toDouble(), parts[2] toDouble(), parts[3] toDouble())
                 } else if (lineBuff startsWith?("d " _buffer)) {
                     parts := lineBuff split(' ')
 

@@ -19,6 +19,10 @@ Point3d: cover template <T> {
         (x - other x, y - other y, z - other z) as Point3d<T>
     }
 
+    operator * (num: T) -> Point3d<T> {
+        (x * num, y * num, z * num) as Point3d<T>
+    }
+
     // These are not necessary but a bit faster than letting the expressions unwarp to a = a +/- b 
     operator@ += (other: Point3d<T>) -> Point3d<T> {
         x += other x

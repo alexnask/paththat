@@ -2,11 +2,32 @@ import ../geometry/Points
 import ../UnsafeArray
 
 import io/[FileWriter, BinarySequence]
+import math
 
 RgbColor: cover {
     r, g, b: UInt8
 
     init: func@ (=r, =g, =b)
+
+    _clamp: static func (p: Float) -> Float {
+        if (p < 0.0) return 0.0
+        if (p > 1.0) return 1.0
+        p
+    }
+
+    fromPercentages: static func (rp, gp, bp: Double) -> This {
+        reverse_gamma := static const 1/2.2 as Double
+
+        r := 255 * _clamp(rp) pow(reverse_gamma)
+        g := 255 * _clamp(gp) pow(reverse_gamma)
+        b := 255 * _clamp(bp) pow(reverse_gamma)
+
+        (r, g, b) as This
+    }
+
+    fromColorPoint: static func (pt: Point3d<Double>) -> This {
+        fromPercentages(pt x, pt y, pt z)
+    }
 }
 
 color: func (r, g, b: UInt8) -> RgbColor {
