@@ -9,6 +9,7 @@ Camera: class {
     direction: Vector3d<Double>
 
     lens: Lens
+    // TODO: Camera should not own a bitmap, rather have some trace method that takes one and renders to it.
     _bitmap: Bitmap
 
     // All angles are in radians
@@ -31,7 +32,7 @@ Camera: class {
         ray_y := direction y + tan(verticalFOV/2) * (2 * y - pixelHeight) / pixelHeight
 
         ray := (position, vec(ray_x, ray_y, direction z) normalized()) as Ray
-        lens distortRay(ray&, x as Float / pixelWidth, y as Float / pixelHeight)
+        lens distortRay(ray&, x as Float / (pixelWidth - 1), y as Float / (pixelHeight - 1))
         ray
     }
 }

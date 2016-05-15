@@ -1,5 +1,5 @@
 import Points, Vectors, Material
-import ../UnsafeArray
+import ../[UnsafeArray, MoreRandom]
 
 import math/Random
 import math
@@ -95,10 +95,12 @@ Triangle: class extends Surface {
     }
 
     randomPoint: func -> Point3d<Double> {
-        r1 := Random random() as Float / RAND_MAX
-        r2 := Random random() as Float / RAND_MAX
+        r1 := Random percentage()
+        r2 := Random percentage()
 
-        p1 * (1 - r1 sqrt()) + p2 * (r1 sqrt() * (1 - r2)) + p3 * (r1 sqrt() * r2)
+        sq := r1 sqrt()
+
+        p1 * (1 - sq) + p2 * (sq * (1 - r2)) + p3 * (sq * r2)
     }
 }
 
@@ -176,21 +178,21 @@ ConvexPolygon: class extends Surface {
             vertex2_idx += points length
         }
 
-        edge1_pt_percent := Random random() as Float / RAND_MAX
+        edge1_pt_percent := Random percentage()
 
         v1 := points[vertex1_idx]
         v2 := points[vertex2_idx]
 
         pt1 := v1 + (v2 - v1) * edge1_pt_percent
 
-        edge2_pt_percent := Random random() as Float / RAND_MAX
+        edge2_pt_percent := Random percentage()
 
         v3 := points[vertex3_idx]
         v4 := points[vertex4_idx]
 
         pt2 := v3 + (v4 - v3) * edge2_pt_percent
 
-        pt_percent := Random random() as Float / RAND_MAX
+        pt_percent := Random percentage()
 
         pt1 + (pt2 - pt1) * pt_percent
     }

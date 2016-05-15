@@ -187,7 +187,7 @@ ObjLoader: class {
         // 1Kb per line should be way more than enough
         lineBuff := Buffer new(1024)
 
-        currMtl: Material
+        currMtl: PhongMaterial
 
         while (fHandle hasNext?()) {
             c := fgetc(fHandle)
@@ -209,7 +209,7 @@ ObjLoader: class {
                         return
                     }
 
-                    currMtl = Material new()
+                    currMtl = PhongMaterial new()
                     materials put(mtlName, currMtl)
                 } else if (lineBuff startsWith?("Ka " _buffer)) {
                     parts := lineBuff split(' ')

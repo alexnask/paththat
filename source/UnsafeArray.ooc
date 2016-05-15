@@ -1,6 +1,7 @@
 // Needs these because rock doesn't generate includes for types geenrated by the templates
 import render/Bitmap
 import geometry/[Surfaces, Points, Mesh, Scene]
+import trace/BidirectionalTracer
 
 UnsafeArray: cover template <T> {
     data: T*

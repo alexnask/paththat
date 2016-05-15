@@ -66,6 +66,25 @@ Scene: class {
         intersectingSurfaces length = 0
     }
 
+    // Visibility test!
+    pointsVisible?: func (p1, p2: Point3d<Double>) -> Bool {
+        ray := (p1, (p2 - p1) vec() normalized()) as Ray
+
+        interPoint: Point3d<Double>
+        surface: Surface = null
+
+        findFirstIntersection(ray, interPoint&, surface&)
+
+        if (!surface) {
+            return true
+        }
+
+        tmax := (p2 - p1) vec() length()
+        tinter := (interPoint - p1) vec() length()
+
+        return tinter > tmax
+    }
+
     // If we don't touch 'point' and 'surface', there is no intersection
     findFirstIntersection: func(ray: Ray, point: Point3d<Double>*, surface: Surface*) {
         epsilon: static const Double = 0.0001
